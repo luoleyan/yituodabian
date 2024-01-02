@@ -31,6 +31,7 @@ public class WebController {
     // POST跳转至登录页面
     @PostMapping("/login")
 
+    // 登录
     public Result login(@RequestBody Account account){
 //        System.out.println("account"+account);
         Account dbAccount;
