@@ -12,20 +12,23 @@ import top.fans39.studentperformance.service.StudentService;
 
 import java.util.List;
 
+// 进行页面跳转
 @RestController
-
 public class WebController {
+    // 引入逻辑层
     @Autowired
     private AdminService adminService;
     @Autowired
     private StudentService studentService;
 
 
+    // 初始页面跳转
     @GetMapping("/")
     public Result hello(){
         return Result.success();
     }
 
+    // POST跳转至登录页面
     @PostMapping("/login")
 
     public Result login(@RequestBody Account account){
@@ -44,6 +47,7 @@ public class WebController {
         return Result.success(dbAccount);
     }
 
+    // 注册功能处理器，跳转至注册页面
     @PostMapping("/register")
     public Result register(@RequestBody Account account){
         if(ObjectUtil.isEmpty(account.getUsername()) || ObjectUtil.isEmpty(account.getPassword())){
