@@ -1,5 +1,6 @@
 package top.fans39.studentperformance.common;
 
+// Result对象用于封装请求结果
 import lombok.Data;
 import lombok.ToString;
 
