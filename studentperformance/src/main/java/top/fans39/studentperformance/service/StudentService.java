@@ -21,5 +21,6 @@ public interface StudentService {
     // 更新学生信息
     void updateStudentById(Student student);
 
+    // 初始查询并展示，同时提供查询和分页功能
     PageInfo<Student> selectPage(Integer pageNum, Integer pageSize, Student student);
 }
