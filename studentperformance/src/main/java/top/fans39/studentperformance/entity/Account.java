@@ -3,6 +3,7 @@ package top.fans39.studentperformance.entity;
 import lombok.Data;
 import lombok.ToString;
 
+// Account类，封装账号信息
 @Data
 @ToString
 public class Account {
