@@ -1,7 +1,10 @@
+// 引入Element-Plus
 import { ElMessage } from 'element-plus'
+// 从router文件夹下引入index.js，默认情况下是名称为index的文件
 import router from '../router'
+// 引入axios进行网络请求
 import axios from "axios";
-
+// 创建axios实例，配置默认URL和后台超时时间
 const request = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
     timeout: 30000  // 后台接口超时时间设置

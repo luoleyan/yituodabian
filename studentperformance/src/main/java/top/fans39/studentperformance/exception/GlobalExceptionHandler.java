@@ -6,13 +6,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.fans39.studentperformance.common.Result;
-
 import javax.servlet.http.HttpServletRequest;
 
+// 全局异常处理器
 @ControllerAdvice(basePackages = "top.fans39.studentperformance.controller")
 public class GlobalExceptionHandler {
     private static final Log log = LogFactory.get();
 
+    // 异常处理器
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result error(HttpServletRequest request, Exception e){
@@ -20,6 +21,7 @@ public class GlobalExceptionHandler {
         return Result.error();
     }
 
+    // 
     @ExceptionHandler(CustomException.class)
     @ResponseBody
     public Result customError(HttpServletRequest request, CustomException e){

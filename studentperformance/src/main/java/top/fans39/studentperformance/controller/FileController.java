@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 
+// 文件上传/下载接口
 @RestController
 @RequestMapping("/files")
 public class FileController {
@@ -26,6 +27,7 @@ public class FileController {
     private String port;
     private static final String ROOT_PATH = System.getProperty("user.dir") + "/files";
 
+    // 文件上传
     @PostMapping("/upload")
     public Result upload(MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
@@ -42,6 +44,7 @@ public class FileController {
         return Result.success(url);
     }
 
+    // 文件下载
     @GetMapping("/download")
     public void download(String fileName, HttpServletResponse response) throws IOException {
         File file = new File(ROOT_PATH + "/" + fileName);

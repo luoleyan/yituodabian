@@ -1,8 +1,8 @@
 package top.fans39.studentperformance.common;
-
 import lombok.Data;
 import lombok.ToString;
 
+// 封装结果信息
 @ToString
 @Data
 public class Result {
