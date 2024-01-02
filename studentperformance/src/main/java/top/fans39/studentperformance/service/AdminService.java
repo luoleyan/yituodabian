@@ -6,7 +6,7 @@ import top.fans39.studentperformance.entity.Admin;
 
 import java.util.List;
 
-
+// 管理员业务层接口
 public interface AdminService {
     Account login(Account account);
 }
