@@ -3,7 +3,7 @@ package top.fans39.studentperformance.entity;
 import lombok.Data;
 import lombok.ToString;
 
-// Admin类，封装管理员信息
+// Admin实体类，封装管理员信息
 @Data
 @ToString
 public class Admin extends Account {
