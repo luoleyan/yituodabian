@@ -1,14 +1,16 @@
+// 引入Vue3的API
 import { createRouter, createWebHistory } from 'vue-router'
-
+// 使用createRouter函数创建路由
 const router = createRouter({
+  // 创建H5历史模式
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'Manager',
-      component: () => import('../views/Manager.vue'),
-      redirect: '/home',
-      children: [
+      path: '/',  // 该路由对应的路径
+      name: 'Manager',  // 该路由的名称
+      component: () => import('../views/Manager.vue'),  // 该路由对应的组件
+      redirect: '/home',  // 重定向
+      children: [    // 该路由的子路由
         {
           path: '/home',
           name: 'home',
