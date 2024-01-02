@@ -8,7 +8,7 @@
           </div>
         </div>
         <div style="width: fit-content; padding-right: 10px; display: flex; align-items: center;">
-          <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" alt="" style="width: 40px; height: 40px">
+          <img :src="user.avatar || 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"  alt="" style="width: 40px; height: 40px; border-radius: 21px; ">
           <span style="margin-left: 5px; color:rgb(255,255,255);">{{user.name}}</span>
         </div>
       </div>
@@ -45,7 +45,7 @@
                 <span style="color: #CECECE;">学生信息</span>
               </el-menu-item>
             </el-sub-menu>
-            <el-menu-item index="/person" style="background-color: rgb(24,24,24);">
+            <el-menu-item index="/person" v-if="user.role === 'STUDENT' " style="background-color: rgb(24,24,24);">
               <el-icon color="#CECECE"><User /></el-icon>
               <span style="color: #CECECE;">个人资料</span>
             </el-menu-item>

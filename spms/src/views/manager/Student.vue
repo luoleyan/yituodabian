@@ -24,7 +24,11 @@
                     <el-table-column prop="email" label="邮箱" />
                     <el-table-column prop="sex" label="性别" />
                     <el-table-column prop="birth" label="生日" />
-                    <el-table-column prop="avatar" label="头像" />
+                    <el-table-column prop="avatar" label="头像" >
+                        <template #default="scope">
+                            <el-image v-if="scope.row.avatar" style="width: 42px; height: 42px; border-radius: 5px" :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]"></el-image>
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作">
                         <template #default="scope">
                             <el-button size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-button>
@@ -40,15 +44,15 @@
                 @current-change="handlePageChange" background layout="prev, pager, next" :total="data.total" />
         </div>
 
-        <el-dialog v-model="data.formVisible" width="42%" style="background: rgb(36,36,36);">
+        <el-dialog v-model="data.formVisible" distroy-on-close width="42%" style="background: rgb(36,36,36);">
             <template #header="{ close, titleId }">
                 <span :id="titleId" class="dlgTitleClass"
                     style="margin: 10px 10px; font-size: large; color: #fff; font-weight: bolder;">课程信息</span>
             </template>
             <el-form :model="data.form" :rules="rules" ref="formRef" label-width="100px" label-position="right"
                 style="padding-right: 42px;">
-                <el-form-item label="学号" prop="username">
-                    <el-input v-model="data.form.username" autocomplete="off" />
+                <el-form-item label="学号" prop="username" >
+                    <el-input v-model="data.form.username" autocomplete="off" disabled />
                 </el-form-item>
                 <el-form-item label="学生密码" prop="password">
                     <el-input show-password v-model="data.form.password" autocomplete="off" />
@@ -71,6 +75,11 @@
                 <el-form-item style="width: 100%;" label="生日">
                     <el-date-picker format="YYYY-MM-DD" value-format="YYYY-MM-DD" v-model="data.form.birth">
                     </el-date-picker>
+                </el-form-item>
+                <el-form-item label="学生头像">
+                    <el-upload action="http://localhost:8088/files/upload" list-type="picture" :on-success="handleImgUploadSuccess">
+                        <el-button style="background: rgb(121, 121, 121); color: aliceblue;" >上传头像</el-button>
+                    </el-upload>
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -208,6 +217,12 @@ const handleDelete = (id) => {
             message: '已取消',
         })
     })
+}
+
+const handleImgUploadSuccess = (res)=>{
+    // console.log(res);
+    data.form.avatar = res.data
+    
 }
 
 </script>
