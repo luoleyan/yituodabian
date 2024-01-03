@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- 支持模糊查询 -->
         <div class="card" style="margin-bottom: 10px;">
             <el-input v-model="data.courseName" style="width: 260px; margin-right: 10px;" placeholder="请输入课程名称查询"
                 :prefix-icon="Search" />
@@ -8,6 +9,7 @@
             <el-button type="primary" @click="load" style="margin-left: 10px;">查询</el-button>
             <el-button type="info" @click="reset">重置</el-button>
         </div>
+        <!-- 页面主要展示信息，成绩信息表 -->
         <div class="card" style="margin-bottom: 10px;">
             <div>
                 <el-table :data="data.tableData" style="width: 100%; background: rgb(36,36,36); color: #66ccff;">
@@ -35,6 +37,7 @@
                 @current-change="handlePageChange" background layout="prev, pager, next" :total="data.total" />
         </div>
 
+        <!-- 管理员进行成绩信息管理的弹窗 -->
         <el-dialog v-model="data.formVisible" width="42%" style="background: rgb(36,36,36);">
             <template #header="{ close, titleId }">
                 <span :id="titleId" class="dlgTitleClass"
@@ -149,19 +152,23 @@ const del = (id) => {
     })
 }
 
+// 编辑成绩信息，传入当前行信息，并使弹窗显示
 const handleEdit = (row) => {
     data.form = JSON.parse(JSON.stringify(row))
     // console.log(data.form);
     data.formVisible = true
 }
 
+// 保存功能函数，更新成绩信息
 const save = () => {
     request.put('/grade/update', data.form).then(res => {
         if (res.code === '200') {
+            // 重新加载页面，使弹窗消失并提示保存成功
             load()
             data.formVisible = false
             ElMessage.success('保存成功')
         } else {
+            // 否则提示错误信息
             ElMessage.error(res.msg)
         }
     })
