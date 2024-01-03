@@ -116,6 +116,7 @@ const load = () => {
 // 调用load()函数，在页面加载时展示信息
 load()
 
+// 在切换页面时，调用load()函数重新加载页面
 const handlePageChange = (pageNum) => {
     load()
 }
