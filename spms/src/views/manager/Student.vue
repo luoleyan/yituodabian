@@ -1,5 +1,7 @@
 <template>
+    <!-- 管理员更新学生信息 -->
     <div>
+        <!-- 支持模糊查询学生信息 -->
         <div class="card" style="margin-bottom: 10px;">
             <el-input v-model="data.name" style="width: 260px; margin-right: 10px;" placeholder="请输入学生姓名查询"
                 :prefix-icon="Search" />
@@ -8,6 +10,7 @@
             <el-input v-model="data.phone" style="width: 260px; margin-right: 10px;" placeholder="请输入手机号查询"
                 :prefix-icon="Search" />
             <el-input v-model="data.email" style="width: 260px;" placeholder="请输入邮箱查询" :prefix-icon="Search" />
+            <!-- 清空搜索框 -->
             <el-button type="primary" @click="load" style="margin-left: 10px;">查询</el-button>
             <el-button type="info" @click="reset">重置</el-button>
         </div>
@@ -15,6 +18,7 @@
             <div style="margin-bottom: 10px;">
                 <el-button type="primary" @click="handleAdd">新增</el-button>
             </div>
+            <!-- 展示现有的所有学生信息，一条数据为一行，一行是一个数组 -->
             <div>
                 <el-table :data="data.tableData" style="width: 100%; background: rgb(36,36,36); color: #66ccff;">
                     <el-table-column prop="id" label="ID" width="70" />
@@ -29,6 +33,7 @@
                             <el-image v-if="scope.row.avatar" style="width: 42px; height: 42px; border-radius: 5px" :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]"></el-image>
                         </template>
                     </el-table-column>
+                    <!-- 每一行的末尾有两个按钮，支持管理员进行编辑和删除学生信息 -->
                     <el-table-column label="操作">
                         <template #default="scope">
                             <el-button size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-button>
@@ -38,7 +43,7 @@
                 </el-table>
             </div>
         </div>
-
+        <!-- 学生信息的页脚，显示当前页号和总页数 -->
         <div class="card">
             <el-pagination v-model:page-size="data.pageSize" v-model:current-page="data.pageNum"
                 @current-change="handlePageChange" background layout="prev, pager, next" :total="data.total" />
@@ -110,6 +115,7 @@ const data = reactive({
     pageNum: 1,
     pageSize: 5,
     formVisible: false,
+    // 这些变量用于绑定修改和新增学生信息时输入的表单元素
     form: {
         id: '',
         name: '',
@@ -122,6 +128,8 @@ const data = reactive({
     },
 })
 
+
+// load()函数用于获取数据并展示
 const load = () => {
     request.get('/student/selectPage', {
         params: {
@@ -134,17 +142,22 @@ const load = () => {
         }
     }).then(res => {
         // console.log(res);
+        // 将查询出的数据作为一行数据展示在页面上
         data.tableData = res.data?.list || []
+        // 更新当前总页数
         data.total = res.data?.total || 0
     })
 }
-
+    
+// 加载页面时调用load()函数展示数据
 load()
 
+// 在切换学生信息页号时根据页号更新展示的信息
 const handlePageChange = (pageNum) => {
     load()
 }
 
+// 清空输入框
 const reset = () => {
     data.name = '',
         data.username = '',
@@ -168,11 +181,13 @@ const rules = reactive({
 
 const formRef = ref()
 
+// 每点击新增时，将绑定数据重新设置为一个空对象，并显示新增/修改弹窗表单
 const handleAdd = () => {
     data.form = {}
     data.formVisible = true
 }
 
+// 保存编辑/新增信息
 const save = () => {
     formRef.value.validate((valid) => {
         if (valid) {
@@ -193,25 +208,31 @@ const save = () => {
     })
 }
 
+// 点击编辑时，操作当前行数据，并显示弹窗表单
 const handleEdit = (row) => {
     data.form = JSON.parse(JSON.stringify(row))
     data.formVisible = true
 }
 
+
+// 点击删除时，传递当前id到后台进行操作
 const handleDelete = (id) => {
     ElMessageBox.confirm('删除后数据无法恢复，您确认删除该条数据吗？', '删除确认', {
         type: 'warning',
     }).then(res => {
+        // axios发送DELETE请求，把id作为路径参数传递
         request.delete('/student/delete/' + id).then(res => {
+            // 请求响应成功时，提示删除成功，重新调用load()函数更新页面
             if (res.code === '200') {
                 ElMessage.success('删除成功')
                 load()
 
             } else {
+                // 否则提示错误信息
                 ElMessage.error(res.msg)
             }
         })
-    }).catch(res => {
+    }).catch(res => {  // 用户点击取消时
         ElMessage({
             type: 'info',
             message: '已取消',
@@ -219,6 +240,7 @@ const handleDelete = (id) => {
     })
 }
 
+// 学生头像上传成功时，将请求回的图片展示在头像区域
 const handleImgUploadSuccess = (res)=>{
     // console.log(res);
     data.form.avatar = res.data
