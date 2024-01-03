@@ -130,7 +130,7 @@ const reset = () => {
     load()
 }
 
-// 处理添加操作，把数据表单置为空，并让弹窗显示在页面上
+// 处理添加操作，把数据表单置为空，并让编辑课程信息的弹窗显示在页面上
 const handleAdd = () => {
     data.form = {}
     data.formVisible = true
