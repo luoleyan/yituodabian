@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- 支持模糊查询 -->
         <div class="card" style="margin-bottom: 10px;">
             <el-input v-model="data.name" style="width: 260px; margin-right: 10px;" placeholder="请输入课程名称查询"
                 :prefix-icon="Search" />
@@ -9,10 +10,12 @@
             <el-button type="primary" @click="load" style="margin-left: 10px;">查询</el-button>
             <el-button type="info" @click="reset">重置</el-button>
         </div>
+        <!-- 新增课程信息 -->
         <div class="card" style="margin-bottom: 10px;">
             <div style="margin-bottom: 10px;">
                 <el-button type="primary" @click="handleAdd">新增</el-button>
             </div>
+            <!-- 课程信息展示，一条数据为一行，一行为一个数组 -->
             <div>
                 <el-table :data="data.tableData" style="width: 100%; background: rgb(36,36,36); color: #66ccff;">
                     <el-table-column prop="id" label="ID" width="70" />
@@ -33,6 +36,7 @@
             </div>
         </div>
 
+        <!-- 点击编辑和新增按钮后出现的弹窗，用于填写相关课程信息传递给后端 -->
         <div class="card">
             <el-pagination v-model:page-size="data.pageSize" v-model:current-page="data.pageNum"
                 @current-change="handlePageChange" background layout="prev, pager, next" :total="data.total" />
@@ -85,7 +89,9 @@ const data = reactive({
     total: 0,
     pageNum: 1,
     pageSize: 5,
+    // 控制弹窗是否显示
     formVisible: false,
+    // 一条数据
     form: {
         id: '',
         name: '',
@@ -97,6 +103,7 @@ const data = reactive({
 })
 
 const load = () => {
+    // 页面加载时将已有课程信息查询并展示在页面上，通过GET请求实现
     request.get('/course/selectPage', {
         params: {
             pageNum: data.pageNum,
@@ -112,12 +119,16 @@ const load = () => {
     })
 }
 
+// 调用load()函数，在页面加载时展示信息
 load()
 
+// 在切换页面时，调用load()函数重新加载页面
 const handlePageChange = (pageNum) => {
     load()
 }
 
+
+// reset()函数将输入框信息重置为空
 const reset = () => {
     data.name = ''
     data.no = ''
@@ -125,45 +136,56 @@ const reset = () => {
     load()
 }
 
+// 处理添加操作，把数据表单置为空，并让编辑课程信息的弹窗显示在页面上
 const handleAdd = () => {
     data.form = {}
     data.formVisible = true
 }
 
+// save()函数，处理编辑和新增信息的弹窗是同一个，根据id来判断是哪一种操作
 const save = () => {
+    // 根据当前是否输入了id来判断，输入了id发送更新信息请求，否则发送添加信息请求
     request.request({
         url: data.form.id ? '/course/update' : '/course/add',
         method: data.form.id ? 'put' : 'post',
         data: data.form
     }).then(res =>{
+        // 请求成功时，重新调用load()函数，把更新后的后台数据展示在页面上
         if(res.code === '200'){
             load()
+            // 并将弹窗元素重新隐藏
             data.formVisible = false
             ElMessage.success('保存成功')
         }else{
+            // 否则提示错误信息
             ElMessage.error(res.msg)
         }
     })
 }
 
+// 处理编辑课程信息的函数，把当前操作的那一行数据进行处理
 const handleEdit = (row) => {
     data.form = JSON.parse(JSON.stringify(row))
     data.formVisible = true
 }
 
+// 处理删除课程信息的函数，传入当前课程的id，根据id删除特定课程
 const handleDelete = (id) => {
     ElMessageBox.confirm('删除后数据无法恢复，您确认删除该条数据吗？', '删除确认', {
         type: 'warning',
     }).then(res =>{
         request.delete('/course/delete/' + id).then(res =>{
         if(res.code === '200'){
+            // 若请求成功，提示删除成功，并再次调用load()函数重新加载页面数据
             ElMessage.success('删除成功')
             load()
             
         }else{
+            // 否则，提示后台返回的错误信息
             ElMessage.error(res.msg)
         }
     })
+        // 如果用户取消了当前操作
     }).catch(res =>{
         ElMessage({
         type: 'info',

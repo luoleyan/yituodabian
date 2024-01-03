@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- 支持模糊查询 -->
         <div class="card" style="margin-bottom: 10px;">
             <el-input v-model="data.courseName" style="width: 260px; margin-right: 10px;" placeholder="请输入课程名称查询"
                 :prefix-icon="Search" />
@@ -8,6 +9,7 @@
             <el-button type="primary" @click="load" style="margin-left: 10px;">查询</el-button>
             <el-button type="info" @click="reset">重置</el-button>
         </div>
+        <!-- 页面主要展示信息，成绩信息表 -->
         <div class="card" style="margin-bottom: 10px;">
             <div>
                 <el-table :data="data.tableData" style="width: 100%; background: rgb(36,36,36); color: #66ccff;">
@@ -19,6 +21,7 @@
                     <el-table-column prop="feedback" label="学生反馈" />
                     <el-table-column label="操作">
                         <template #default="scope">
+                            <!-- 当前用户身份为管理员时，显示成绩的编辑和删除按钮；学生不能操作成绩相关信息 -->
                             <el-button type="info" size="small" @click="handleEdit(scope.row)"  v-if="data.user.role === 'ADMIN'">编辑</el-button>
                             <el-button type="danger" size="small" @click="del(scope.row.id)"  v-if="data.user.role === 'ADMIN'">删除</el-button>
                             <el-button type="info" size="small" @click="handleEdit(scope.row)"
@@ -34,6 +37,7 @@
                 @current-change="handlePageChange" background layout="prev, pager, next" :total="data.total" />
         </div>
 
+        <!-- 管理员进行成绩信息管理的弹窗 -->
         <el-dialog v-model="data.formVisible" width="42%" style="background: rgb(36,36,36);">
             <template #header="{ close, titleId }">
                 <span :id="titleId" class="dlgTitleClass"
@@ -83,53 +87,64 @@ const data = reactive({
     },
 })
 
-
+// load()函数，查询每页的数据并展示
 const load = () => {
     let params = {
         pageNum: data.pageNum,
         pageSize: data.pageSize,
+        // 去除前后多余的空格
         courseName: data.courseName.trim(),
         studentName: data.studentName.trim(),
     }
+    // 若当前的用户身份为学生
     if (data.user.role === "STUDENT") {
+        // 将发送当前用户的id
         params.studentId = data.user.id
     }
+    // 用GET请求，查询成绩信息
     request.get('/grade/selectPage', {
-        
+        // 将params对象作为参数发送
         params: params
     }).then(res => {
         // console.log(res);
+        // 若响应信息中存在list，则作为一行数据显示在页面上
         data.tableData = res.data?.list || []
+        // 若响应信息中存在total，则作为当前页面总数展示在页面上
         data.total = res.data?.total || 0
     })
 }
-
+// 加载页面时，调用load()函数查询信息并在页面上显示数据
 load()
 
+// 切换页数时，根据页号重新加载数据
 const handlePageChange = (pageNum) => {
     load()
 }
 
+// 将输入框置空
 const reset = () => {
     data.courseName = ''
     data.studentName = ''
     load()
 }
 
+// 实现删除功能的函数，根据id删除成绩信息
 const del = (id) => {
     ElMessageBox.confirm('删除后数据无法恢复，您确认删除该条数据吗？', '删除确认', {
         type: 'warning',
     }).then(res => {
+        // 发送DELETE请求，用路径传递当前成绩信息id
         request.delete('/grade/delete/' + id).then(res => {
+            // 若请求成功，则提示删除成功，并更新页面
             if (res.code === '200') {
                 ElMessage.success('删除成功')
                 load()
-
+            // 否则提示错误信息
             } else {
                 ElMessage.error(res.msg)
             }
         })
-    }).catch(res => {
+    }).catch(res => {    // 异常处理，当用户取消当前操作时
         ElMessage({
             type: 'info',
             message: '已取消',
@@ -137,25 +152,27 @@ const del = (id) => {
     })
 }
 
+// 编辑成绩信息，传入当前行信息，并使弹窗显示
 const handleEdit = (row) => {
     data.form = JSON.parse(JSON.stringify(row))
     // console.log(data.form);
     data.formVisible = true
 }
 
+// 保存功能函数，更新成绩信息
 const save = () => {
     request.put('/grade/update', data.form).then(res => {
         if (res.code === '200') {
+            // 重新加载页面，使弹窗消失并提示保存成功
             load()
             data.formVisible = false
             ElMessage.success('保存成功')
         } else {
+            // 否则提示错误信息
             ElMessage.error(res.msg)
         }
     })
 }
-
-
 
 </script>
 

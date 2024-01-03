@@ -7,5 +7,6 @@
 </template>
 
 <script setup>
+  // 主页路由，从本地存储空间中取出管理员信息，用于展示
 const user = JSON.parse(localStorage.getItem('admin') || '{}')
 </script>
