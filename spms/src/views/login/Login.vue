@@ -48,19 +48,24 @@ const data = reactive(
 
 const login = () => {
     // console.log(data.account);
+    // 判断当前输入用户名和密码是否为空
     if (data.account.username == '' || data.account.password == '') {
         alert('账号或密码不能为空')
         router.push('/login')
     } else {
+        // 若账号密码不为空，利用axios发送POST请求，将当前输入的用户名和密码作为数据传递
         request.post('/login', data.account).then(res => {
             console.log(res)
+            // 请求成功时，提示登录成功
             if (res.code === '200') {
                 alert('登录成功');
                 console.log(res.data);
+                // 将user信息存入本地存储空间
                 localStorage.setItem("admin", JSON.stringify(res.data));
                 router.push('/home')
             }
             else {
+                // 否则，打印错误信息，并弹窗提示
                 console.log(res.data);
                 alert(res.msg);
 
