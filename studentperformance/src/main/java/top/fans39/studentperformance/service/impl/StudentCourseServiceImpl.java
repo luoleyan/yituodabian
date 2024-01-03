@@ -48,7 +48,7 @@ public class StudentCourseServiceImpl extends ServiceImpl<StudentCourseDao, Stud
         PageHelper.startPage(pageNum,pageSize);
 //        System.out.println(student);
         MPJLambdaWrapper<StudentCourse> studentCourseQueryWrapper = new MPJLambdaWrapper<>();
-         studentCourseQueryWrapper.select(StudentCourse::getId,StudentCourse::getName,StudentCourse::getNo);
+         studentCourseQueryWrapper.select(StudentCourse::getId,StudentCourse::getName,StudentCourse::getNo,StudentCourse::getCourseId,StudentCourse::getStudentId);
          studentCourseQueryWrapper.select(Student::getName);
          studentCourseQueryWrapper.selectAs(Student::getName,StudentCourse::getStudentName);
          studentCourseQueryWrapper.leftJoin(Student.class,Student::getId,StudentCourse::getStudentId);

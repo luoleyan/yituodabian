@@ -43,7 +43,17 @@
                 <span style="color: #CECECE;">选课记录</span>
               </el-menu-item>
             </el-sub-menu>
-            <el-sub-menu index="3" v-if="user.role === 'ADMIN' " style="background-color: rgb(24,24,24);">
+            <el-sub-menu index="3" style="background-color: rgb(24,24,24);">
+              <template #title>
+                <el-icon color="#CECECE"><Memo /></el-icon>
+                <span style="color: #CECECE;">成绩信息</span>
+              </template>
+              <el-menu-item index="/grade" style="background-color: rgb(24,24,24);">
+                <el-icon color="#CECECE" ><Document /></el-icon>
+                <span style="color: #CECECE;">学生成绩</span>
+              </el-menu-item>
+              </el-sub-menu>
+            <el-sub-menu index="4" v-if="user.role === 'ADMIN' " style="background-color: rgb(24,24,24);">
               <template #title>
                 <el-icon color="#CECECE"><User /></el-icon>
                 <span style="color: #CECECE;">用户管理</span>

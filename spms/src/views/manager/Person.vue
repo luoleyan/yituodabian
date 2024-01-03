@@ -8,8 +8,8 @@
                         <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="学号" prop="username" disabled>
-                    <el-input v-model="data.form.username" autocomplete="off" />
+                <el-form-item label="学号" prop="username" >
+                    <el-input v-model="data.form.username" autocomplete="off" disabled />
                 </el-form-item>
                 <el-form-item label="学生密码" prop="password">
                     <el-input show-password v-model="data.form.password" autocomplete="off" />
