@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- 支持模糊查询的搜索框 -->
         <div class="card" style="margin-bottom: 10px;">
             <el-input v-model="data.name" style="width: 260px; margin-right: 10px;" placeholder="请输入课程名称查询"
                 :prefix-icon="Search" />
@@ -9,8 +10,10 @@
             <el-button type="primary" @click="load" style="margin-left: 10px;">查询</el-button>
             <el-button type="info" @click="reset">重置</el-button>
         </div>
+        <!-- 学生选课时，展示在页面上的课程信息 -->
         <div class="card" style="margin-bottom: 10px;">
             <div>
+                <!-- 展示的是data.tableData中的数据 -->
                 <el-table :data="data.tableData" style="width: 100%; background: rgb(36,36,36); color: #66ccff;">
                     <el-table-column prop="id" label="ID" width="70" />
                     <el-table-column prop="name" label="课程名称" />
@@ -27,6 +30,7 @@
             </div>
         </div>
 
+        <!-- 课程信息的页面管理页脚，展示数据的总页数和当前页号 -->
         <div class="card">
             <el-pagination v-model:page-size="data.pageSize" v-model:current-page="data.pageNum"
                 @current-change="handlePageChange" background layout="prev, pager, next" :total="data.total" />
