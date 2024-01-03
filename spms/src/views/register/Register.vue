@@ -1,4 +1,5 @@
 <template>
+    <!-- 注册页面 -->
     <div class="background">
         <div>
             <div style="width: 350px;" class="wrapper">
