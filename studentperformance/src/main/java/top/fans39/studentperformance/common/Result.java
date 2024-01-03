@@ -6,8 +6,8 @@ import lombok.ToString;
 @ToString
 @Data
 public class Result {
-    private static  final  String SUCCESS_CODE = "200";
-    private static  final  String ERROR_CODE = "500";
+    private static  final  String SUCCESS_CODE = "200";  // 设置成功状态码为200
+    private static  final  String ERROR_CODE = "500";  // 设置错误状态码500
     private String code;
     private String msg;
     private Object data;
@@ -21,6 +21,7 @@ public class Result {
     public Result() {
     }
 
+    // 在本次操作成功时，设置成功状态码和“请求成功”状态信息
     public static Result success() {
         Result result = new Result();
         result.setCode(SUCCESS_CODE);
@@ -28,6 +29,7 @@ public class Result {
         return result;
     }
 
+    // 操作成功时再把数据封装进data变量中
     public static Result success(Object data) {
         Result result = success();
         result.setData(data);
