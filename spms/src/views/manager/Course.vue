@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- 支持模糊查询 -->
         <div class="card" style="margin-bottom: 10px;">
             <el-input v-model="data.name" style="width: 260px; margin-right: 10px;" placeholder="请输入课程名称查询"
                 :prefix-icon="Search" />
@@ -9,10 +10,12 @@
             <el-button type="primary" @click="load" style="margin-left: 10px;">查询</el-button>
             <el-button type="info" @click="reset">重置</el-button>
         </div>
+        <!-- 新增课程信息 -->
         <div class="card" style="margin-bottom: 10px;">
             <div style="margin-bottom: 10px;">
                 <el-button type="primary" @click="handleAdd">新增</el-button>
             </div>
+            <!-- 课程信息展示，一条数据为一行，一行为一个数组 -->
             <div>
                 <el-table :data="data.tableData" style="width: 100%; background: rgb(36,36,36); color: #66ccff;">
                     <el-table-column prop="id" label="ID" width="70" />
@@ -33,6 +36,7 @@
             </div>
         </div>
 
+        <!-- 点击编辑和新增按钮后出现的弹窗，用于填写相关课程信息传递给后端 -->
         <div class="card">
             <el-pagination v-model:page-size="data.pageSize" v-model:current-page="data.pageNum"
                 @current-change="handlePageChange" background layout="prev, pager, next" :total="data.total" />
@@ -85,7 +89,9 @@ const data = reactive({
     total: 0,
     pageNum: 1,
     pageSize: 5,
+    // 控制弹窗是否显示
     formVisible: false,
+    // 一条数据
     form: {
         id: '',
         name: '',
