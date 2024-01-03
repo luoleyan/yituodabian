@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-    import router from '@/router';
+import router from '@/router';
 import request from '@/utils/request';
 import { reactive } from 'vue';
 import { Plus } from '@element-plus/icons-vue'
