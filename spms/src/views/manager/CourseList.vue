@@ -52,7 +52,9 @@ const data = reactive({
     formVisible: false,
     student: JSON.parse(localStorage.getItem('admin') || '{}')
 })
-// 查询数据，更新页面；同时实现了课程查询功能
+/*
+查询数据，更新页面；同时实现了模糊课程查询功能
+*/
 const load = () => {
     request.get('/course/selectPage', {
         params: {
