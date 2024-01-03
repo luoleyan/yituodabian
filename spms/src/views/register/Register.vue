@@ -17,6 +17,7 @@
                         <el-button style="width: 100%;" type="primary" @click="register">注 册</el-button>
                     </el-form-item>
                 </el-form>
+                <!-- 点击跳转至登录页面 -->
                 <div class="register-link">
                     <p>已有账号？<a href="/login">即刻登录！</a></p>
                 </div>
@@ -48,10 +49,12 @@ const register = () => {
     }else {
         request.post('/register', data.student).then(res => {
             // console.log(res)
+            // 请求成功时，将注册时提交的信息放入本地存储空间
             if (res.code === '200') {
                 alert('注册成功');
                 console.log(res.data);
                 localStorage.setItem("admin", JSON.stringify(res.data));
+                // 并跳转至登录页面
                 router.push('/login')
             }
             else {
