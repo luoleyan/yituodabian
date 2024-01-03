@@ -1,4 +1,5 @@
 <template>
+    <!-- 展示当前登录学生的个人信息，头像、学号、密码等等 -->
     <div class="card" style="width: 64%; padding: 42px;">
             <el-form :model="data.form"  ref="formRef" label-width="100px" label-position="right"
                 style="padding-right: 42px;">
@@ -45,24 +46,29 @@
 import request from '@/utils/request';
 import { reactive } from 'vue';
 import { Plus } from '@element-plus/icons-vue'
+    // 将登录时存储在本地存储空间的信息取出，赋值给data变量
     const data = reactive({
         form:JSON.parse(localStorage.getItem('admin') || '{}') 
     })
-
+    // 后端头像上传成功时，将图片显示在页面上
     const handleImgUploadSuccess = (res)=>{
     // console.log(res);
     data.form.avatar = res.data
     
 }
 
+// 学生可以自己更新信息，点击更新按钮时触发此函数
 const update = () =>{
+    // axios发送更新请求，将表单中的数据传递到后台更新
     request.put('/student/update',data.form).then(res =>{
     if (res.code === '200') {
-                    ElMessage.success('保存成功')
-                    router.push('/login')
-                } else {
-                    ElMessage.error(res.msg)
-                }
+        // 当请求成功时，路由跳转到登录页面
+        ElMessage.success('保存成功')
+        router.push('/login')
+        } else {
+        // 否则，提示错误信息
+            ElMessage.error(res.msg)
+        }
             
 })
 }
