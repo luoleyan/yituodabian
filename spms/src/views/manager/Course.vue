@@ -136,7 +136,7 @@ const handleAdd = () => {
     data.formVisible = true
 }
 
-// save()函数
+// save()函数，处理编辑和新增信息的弹窗是同一个，根据id来判断是哪一种操作
 const save = () => {
     // 根据当前是否输入了id来判断，输入了id发送更新信息请求，否则发送添加信息请求
     request.request({
@@ -157,13 +157,13 @@ const save = () => {
     })
 }
 
-// 处理编辑函数，把当前操作的那一行数据进行处理
+// 处理编辑课程信息的函数，把当前操作的那一行数据进行处理
 const handleEdit = (row) => {
     data.form = JSON.parse(JSON.stringify(row))
     data.formVisible = true
 }
 
-// 处理删除的函数，传入当前课程的id，根据id删除特定课程
+// 处理删除课程信息的函数，传入当前课程的id，根据id删除特定课程
 const handleDelete = (id) => {
     ElMessageBox.confirm('删除后数据无法恢复，您确认删除该条数据吗？', '删除确认', {
         type: 'warning',
