@@ -97,6 +97,7 @@ const data = reactive({
 })
 
 const load = () => {
+    // 页面加载时将已有课程信息查询并展示在页面上，通过GET请求实现
     request.get('/course/selectPage', {
         params: {
             pageNum: data.pageNum,
@@ -112,12 +113,15 @@ const load = () => {
     })
 }
 
+// 调用load()函数，在页面加载时展示信息
 load()
 
 const handlePageChange = (pageNum) => {
     load()
 }
 
+
+// reset()函数将输入框信息重置为空
 const reset = () => {
     data.name = ''
     data.no = ''
@@ -125,45 +129,56 @@ const reset = () => {
     load()
 }
 
+// 处理添加操作，把数据表单置为空，并让弹窗显示在页面上
 const handleAdd = () => {
     data.form = {}
     data.formVisible = true
 }
 
+// save()函数
 const save = () => {
+    // 根据当前是否输入了id来判断，输入了id发送更新信息请求，否则发送添加信息请求
     request.request({
         url: data.form.id ? '/course/update' : '/course/add',
         method: data.form.id ? 'put' : 'post',
         data: data.form
     }).then(res =>{
+        // 请求成功时，重新调用load()函数，把更新后的后台数据展示在页面上
         if(res.code === '200'){
             load()
+            // 并将弹窗元素重新隐藏
             data.formVisible = false
             ElMessage.success('保存成功')
         }else{
+            // 否则提示错误信息
             ElMessage.error(res.msg)
         }
     })
 }
 
+// 处理编辑函数，把当前操作的那一行数据进行处理
 const handleEdit = (row) => {
     data.form = JSON.parse(JSON.stringify(row))
     data.formVisible = true
 }
 
+// 处理删除的函数，传入当前课程的id，根据id删除特定课程
 const handleDelete = (id) => {
     ElMessageBox.confirm('删除后数据无法恢复，您确认删除该条数据吗？', '删除确认', {
         type: 'warning',
     }).then(res =>{
         request.delete('/course/delete/' + id).then(res =>{
         if(res.code === '200'){
+            // 若请求成功，提示删除成功，并再次调用load()函数重新加载页面数据
             ElMessage.success('删除成功')
             load()
             
         }else{
+            // 否则，提示后台返回的错误信息
             ElMessage.error(res.msg)
         }
     })
+        // 如果用户取消了当前操作
     }).catch(res =>{
         ElMessage({
         type: 'info',
