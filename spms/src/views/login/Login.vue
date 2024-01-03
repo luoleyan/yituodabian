@@ -1,4 +1,5 @@
 <template>
+    <!-- 用户登录 -->
     <div class="background">
         <div>
             <div style="width: 350px;" class="wrapper">
@@ -12,6 +13,7 @@
                         <el-input show-password style="width: 100%;" prefix-icon="Lock" v-model="data.account.password"
                             placeholder="请输入密码" />
                     </el-form-item>
+                    <!-- 选择身份，根据身份的不同页面会有不同的展示 -->
                     <el-form-item prop="role">
                         <el-select style="width: 100%;" v-model="data.account.role" placeholder="请选择角色">
                             <el-option label="管理员" value="ADMIN"></el-option>
@@ -26,6 +28,7 @@
                     <label><input type="checkbox">记住密码</label>
                     <a href="#">忘记密码?</a>
                 </div>
+                <!-- 点击跳转至注册页面 -->
                 <div class="register-link">
                     <p>还没账号？<a href="/register">即刻注册！</a></p>
                 </div>
