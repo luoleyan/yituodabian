@@ -52,7 +52,7 @@ const data = reactive({
     formVisible: false,
     student: JSON.parse(localStorage.getItem('admin') || '{}')
 })
-
+// 查询数据，更新页面；同时实现了课程查询功能
 const load = () => {
     request.get('/course/selectPage', {
         params: {
@@ -64,17 +64,22 @@ const load = () => {
         }
     }).then(res => {
         // console.log(res);
+        // 在响应数据存在时赋值为其中的list属性，否则赋值为空数组
         data.tableData = res.data?.list || []
+        // 否则赋值为0
         data.total = res.data?.total || 0
     })
 }
 
+// 页面加载时调用load()函数，查询、展示数据并更新页面
 load()
 
+// 切换页面时根据当前页号重新查询数据，并调用load()函数展示在页面上
 const handlePageChange = (pageNum) => {
     load()
 }
 
+// reset函数用于重置输入框
 const reset = () => {
     data.name = ''
     data.no = ''
@@ -82,12 +87,17 @@ const reset = () => {
     load()
 }
 
+// 选课功能的实现，传入当前行信息
 const selectCourse = (row) =>{
+    // axios发送请求，将当前登录的学生id和课程名、课程编号和Id发送到后端
     request.post("/studentCourse/add", {studentId: data.student.id, name: row.name, no: row.no, courseId: row.id}).then(res =>{
         if(res.code === '200'){
+            // 请求成功时提示选课成功
             ElMessage.success('选课成功')
+            // 更新页面
             load()
         }else{
+            // 请求失败就提示错误信息
             ElMessage.error(res.msg)
         }
     })
