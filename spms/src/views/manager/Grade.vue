@@ -19,6 +19,7 @@
                     <el-table-column prop="feedback" label="学生反馈" />
                     <el-table-column label="操作">
                         <template #default="scope">
+                            <!-- 当前用户身份为管理员时，显示成绩的编辑和删除按钮；学生不能操作成绩相关信息 -->
                             <el-button type="info" size="small" @click="handleEdit(scope.row)"  v-if="data.user.role === 'ADMIN'">编辑</el-button>
                             <el-button type="danger" size="small" @click="del(scope.row.id)"  v-if="data.user.role === 'ADMIN'">删除</el-button>
                             <el-button type="info" size="small" @click="handleEdit(scope.row)"
@@ -83,53 +84,64 @@ const data = reactive({
     },
 })
 
-
+// load()函数，查询每页的数据并展示
 const load = () => {
     let params = {
         pageNum: data.pageNum,
         pageSize: data.pageSize,
+        // 去除前后多余的空格
         courseName: data.courseName.trim(),
         studentName: data.studentName.trim(),
     }
+    // 若当前的用户身份为学生
     if (data.user.role === "STUDENT") {
+        // 将发送当前用户的id
         params.studentId = data.user.id
     }
+    // 用GET请求，查询成绩信息
     request.get('/grade/selectPage', {
-        
+        // 将params对象作为参数发送
         params: params
     }).then(res => {
         // console.log(res);
+        // 若响应信息中存在list，则作为一行数据显示在页面上
         data.tableData = res.data?.list || []
+        // 若响应信息中存在total，则作为当前页面总数展示在页面上
         data.total = res.data?.total || 0
     })
 }
-
+// 加载页面时，调用load()函数查询信息并在页面上显示数据
 load()
 
+// 切换页数时，根据页号重新加载数据
 const handlePageChange = (pageNum) => {
     load()
 }
 
+// 将输入框置空
 const reset = () => {
     data.courseName = ''
     data.studentName = ''
     load()
 }
 
+// 实现删除功能的函数，根据id删除成绩信息
 const del = (id) => {
     ElMessageBox.confirm('删除后数据无法恢复，您确认删除该条数据吗？', '删除确认', {
         type: 'warning',
     }).then(res => {
+        // 发送DELETE请求，用路径传递当前成绩信息id
         request.delete('/grade/delete/' + id).then(res => {
+            // 若请求成功，则提示删除成功，并更新页面
             if (res.code === '200') {
                 ElMessage.success('删除成功')
                 load()
-
+            // 否则提示错误信息
             } else {
                 ElMessage.error(res.msg)
             }
         })
-    }).catch(res => {
+    }).catch(res => {    // 异常处理，当用户取消当前操作时
         ElMessage({
             type: 'info',
             message: '已取消',
@@ -154,8 +166,6 @@ const save = () => {
         }
     })
 }
-
-
 
 </script>
 
