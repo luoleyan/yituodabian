@@ -87,7 +87,7 @@ const login = () => {
     overflow: hidden;
     min-width: 100vh;
     min-height: 100vh;
-    background: url(../source/illust_97285941_20220915_160606.jpg) no-repeat;
+    background:linear-gradient(#0000006f,#0000006f) ,url(../source/illust_97285941_20220915_160606.jpg) no-repeat;
     background-size: cover;
 }
 

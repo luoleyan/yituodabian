@@ -77,7 +77,7 @@ const register = () => {
     overflow: hidden;
     min-width: 100vh;
     min-height: 100vh;
-    background: url('../source/illust_102638087_20221116_163857.jpg') no-repeat;
+    background: linear-gradient(#0000006f,#0000006f) , url('../source/illust_102638087_20221116_163857.jpg') no-repeat;
     background-size: cover;
 }
 
