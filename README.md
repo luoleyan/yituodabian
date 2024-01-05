@@ -1,6 +1,6 @@
 # 依托答辩💩
 
-前端搭建
+##前端搭建
 
 ```cmd
 cd ./spms
@@ -28,7 +28,7 @@ npm run build
 
 
 
-后端搭建
+##后端搭建
 
 ```cmd
 cd ./studentperformance
